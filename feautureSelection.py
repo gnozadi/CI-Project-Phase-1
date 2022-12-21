@@ -32,6 +32,13 @@ def max(x):  # 6 - Statistical
     return np.max(x, axis=1)
 
 
+def min(x):
+    return np.min(x, axis=1)
+
+
+def var(x):
+    return np.var(x, axis=1)
+
 def shannon_i(x):  # 7 - Entropy(1)
     shannon_entropy = 0
     counts = collections.Counter([item for item in x])
@@ -123,18 +130,25 @@ def zc(x):
     return np.array(arr)
 
 
-def fourier_transform(x):
-    # arr = []
-    # for i in range(len(x)):
-    # arr.append()
-    return np.fft.fft(x)
-    # return np.array(arr)
+def negative_sum_i(x):
+    sum = 0
+    for i in range(len(x)):
+        if x[i]<0:
+            sum += x[i]
+    return sum
+
+
+def negative_sum(x):
+    arr = []
+    for i in range(len(x)):
+        arr.append(negative_sum_i(x[i]))
+    return np.array(arr)
+
 
 def feature_engineering(x):
-    out = np.vstack((median(x), mean(x), std(x), skw(x), krt(x),max(x),shannon(x),log_energy(x),renyi(x), norm(x), ptp(x), zc(x)))
+    out = np.vstack((median(x), mean(x), std(x), skw(x), krt(x),max(x), min(x),var(x) ,shannon(x),log_energy(x),renyi(x), norm(x), ptp(x), zc(x), negative_sum(x)))
     return out.transpose()
 
+
 x = pickle.load(open('x.pkl', 'rb'))
-# print(fft_i(x))
-# print(fourier_transform(x))
 print(feature_engineering(x).shape)
