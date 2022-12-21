@@ -24,7 +24,7 @@ for ind in range(len(cs)):
 
 x = np.array(x)
 y = np.array(y)
-print(x.shape)
+# print(x.shape)
 
 pickle.dump(x, open('x.pkl', 'wb'))
 pickle.dump(y, open('y.pkl', 'wb'))
