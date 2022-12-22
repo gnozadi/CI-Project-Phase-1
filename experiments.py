@@ -1,16 +1,14 @@
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, recall_score, precision_score
 import matplotlib.pyplot as plt
 import pickle
 from scipy.signal import butter, lfilter
-from sklearn.svm import SVC
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import Normalizer
 import random
 import os
-
+from sklearn import metrics
 import feautureSelection
+import classification
 
 seed = 57
 
@@ -20,7 +18,6 @@ np.random.seed(seed)
 
 x = pickle.load(open('x.pkl', 'rb'))
 y = pickle.load(open('y.pkl', 'rb'))
-
 
 x_normal = np.concatenate((x[:300], x[400:]), axis=0)
 x_seizure = x[300:400]
@@ -34,77 +31,38 @@ b, a = butter(3, [0.5, 40], btype='bandpass', fs=sampling_freq)
 x_normal_filtered = np.array([lfilter(b, a, x_normal[ind, :]) for ind in range(x_normal.shape[0])])
 x_seizure_filtered = np.array([lfilter(b, a, x_seizure[ind, :]) for ind in range(x_seizure.shape[0])])
 
-
 x_normal = x_normal_filtered
 x_seizure = x_seizure_filtered
 
 x = np.concatenate((x_normal, x_seizure))
 y = np.concatenate((np.zeros((400, 1)), np.ones((100, 1))))
 
-output = feautureSelection.feature_engineering(x)
+normalized_x = Normalizer().fit(x)
+output = feautureSelection.feature_engineering(normalized_x)
 x_train, x_test, y_train, y_test = train_test_split(output, y, random_state=seed, test_size=0.2)
 
+f = open("normal_output.txt", "w")
 
-# clf1 = SVC(kernel='linear')
-# clf2 = RandomForestClassifier(max_depth=2)
-# clf3 = KNeighborsClassifier()
-# clf4 = KNeighborsClassifier(n_neighbors=9)
-#
-#
-# # clf1.fit(x_train, y_train)
-# # clf2.fit(x_train, y_train)
-# clf3.fit(x_train,y_train)
-# clf4.fit(x_train,y_train)
-#
-# # y_pred = clf1.predict(x_test)
-# # y_pred2 = clf2.predict(x_test)
-# y_pred3 = clf3.predict(x_test)
-# y_pred4 = clf4.predict(x_test)
-#
-# # print(accuracy_score(y_test, y_pred))
-# # print(accuracy_score(y_test, y_pred2))
-# print(accuracy_score(y_test, y_pred3))
-# print(accuracy_score(y_test, y_pred4))
+classification.svm(x_train, y_train, x_test, y_test, f)
+classification.random_forest(x_train, y_train, x_test, y_test, f)
+classification.knn(x_train, y_train, x_test, y_test, f)
 
-print("SVM")
-clf_svm = SVC(kernel='linear')
-clf_svm.fit(x_train, y_train)
-pred = clf_svm.predict(x_test)
-print(accuracy_score(y_test, pred), precision_score(y_test, pred), recall_score(y_test, pred))
-clf_svm = SVC(kernel='poly')
-clf_svm.fit(x_train, y_train)
-pred = clf_svm.predict(x_test)
-print(accuracy_score(y_test, pred), precision_score(y_test, pred), recall_score(y_test, pred))
-clf_svm = SVC(kernel='rbf')
-clf_svm.fit(x_train, y_train)
-pred = clf_svm.predict(x_test)
-print(accuracy_score(y_test, pred), precision_score(y_test, pred), recall_score(y_test, pred))
-clf_svm = SVC(kernel='sigmoid')
-clf_svm.fit(x_train, y_train)
-pred = clf_svm.predict(x_test)
-print(accuracy_score(y_test, pred), precision_score(y_test, pred), recall_score(y_test, pred))
+f.close()
 
-print("Random Forest")
-clf_rf = RandomForestClassifier(criterion='gini')
-clf_rf.fit(x_train, y_train)
-pred = clf_rf.predict(x_test)
-print(accuracy_score(y_test, pred), precision_score(y_test, pred), recall_score(y_test, pred))
-clf_rf = RandomForestClassifier(criterion='entropy')
-clf_rf.fit(x_train, y_train)
-pred = clf_rf.predict(x_test)
-print(accuracy_score(y_test, pred), precision_score(y_test, pred), recall_score(y_test, pred))
-clf_rf = RandomForestClassifier(criterion='log_loss')
-clf_rf.fit(x_train, y_train)
-pred = clf_rf.predict(x_test)
-print(accuracy_score(y_test, pred), precision_score(y_test, pred), recall_score(y_test, pred))
+fig, ax = plt.subplots(figsize=(6, 6))
+clf = classification.classifiers
+pred = classification.predicts
+for i in range(len(clf)):
+    text = ''
+    if i < 4:
+        text = f'svm {i}'
+    elif 4 <= i < 7:
+        text = f'random forest {i}'
+    else:
+        text = f'KNN when k = {i - 6}'
+    if i <= 12:
+        fpr, tpr, thresholds = metrics.roc_curve(y_test, pred[i])
+        plt.plot(fpr, tpr, label=text)
 
-print("KNN")
-for i in range(1,100):
-    clf_KNN = KNeighborsClassifier(n_neighbors=i)
-    clf_KNN.fit(x_train, y_train)
-    pred = clf_KNN.predict(x_test)
-    print(i, accuracy_score(y_test, pred), precision_score(y_test, pred), recall_score(y_test, pred))
-
-
-
-
+plt.legend()
+plt.show()
