@@ -49,38 +49,34 @@ def svm(x_train, y_train, x_test, y_test, f):
 
 
 def random_forest(x_train, y_train, x_test, y_test, f):
-    TP = 0
-    TN = 0
-    FP = 0
-    FN = 0
     f.write("Random Forest\n")
-    clf_rf = RandomForestClassifier(criterion='gini')
-    clf_rf.fit(x_train, y_train)
-    classifiers.append(clf_rf)
-    pred1 = clf_rf.predict(x_test)
-    predicts.append(pred1)
-    text = f'{accuracy_score(y_test, pred1)} {precision_score(y_test, pred1)} {recall_score(y_test, pred1)}\n'
-    f.write(text)
-    f.write(f'{confusion_matrix(y_test, pred1)}\n')
-
-    clf_rf = RandomForestClassifier(criterion='entropy')
-    clf_rf.fit(x_train, y_train)
-    classifiers.append(clf_rf)
-    pred2 = clf_rf.predict(x_test)
-    predicts.append(pred2)
-    text = f'{accuracy_score(y_test, pred2)} {precision_score(y_test, pred2)} {recall_score(y_test, pred2)}\n'
-    f.write(text)
-    f.write(f'{confusion_matrix(y_test, pred2)}\n')
-
-    clf_rf = RandomForestClassifier(criterion='log_loss')
-    clf_rf.fit(x_train, y_train)
-    classifiers.append(clf_rf)
-    pred3 = clf_rf.predict(x_test)
-    predicts.append(pred3)
-    text = f'{accuracy_score(y_test, pred3)} {precision_score(y_test, pred3)} {recall_score(y_test, pred3)}\n'
-    f.write(text)
-    f.write(f'{confusion_matrix(y_test, pred3)}\n')
-    ConfusionMatrixDisplay.from_estimator(clf_rf, x_test, y_test)
+    # clf_rf = RandomForestClassifier(criterion='gini')
+    # clf_rf.fit(x_train, y_train)
+    # classifiers.append(clf_rf)
+    # pred1 = clf_rf.predict(x_test)
+    # predicts.append(pred1)
+    # text = f'{accuracy_score(y_test, pred1)} {precision_score(y_test, pred1)} {recall_score(y_test, pred1)}\n'
+    # f.write(text)
+    # f.write(f'{confusion_matrix(y_test, pred1)}\n')
+    #
+    # clf_rf = RandomForestClassifier(criterion='entropy')
+    # clf_rf.fit(x_train, y_train)
+    # classifiers.append(clf_rf)
+    # pred2 = clf_rf.predict(x_test)
+    # predicts.append(pred2)
+    # text = f'{accuracy_score(y_test, pred2)} {precision_score(y_test, pred2)} {recall_score(y_test, pred2)}\n'
+    # f.write(text)
+    # f.write(f'{confusion_matrix(y_test, pred2)}\n')
+    for i in range(1, 100):
+        clf = RandomForestClassifier(max_depth=i)
+        clf.fit(x_train, y_train)
+        classifiers.append(clf)
+        pred = clf.predict(x_test)
+        text = f'{len(classifiers)} {i} {accuracy_score(y_test, pred)} {precision_score(y_test, pred)} {recall_score(y_test, pred)}\n'
+        f.write(text)
+        predicts.append(pred)
+        f.write(f'{confusion_matrix(y_test, pred)}\n')
+    print(len(classifiers))
 
 
 def knn(x_train, y_train, x_test, y_test, f):
@@ -90,7 +86,7 @@ def knn(x_train, y_train, x_test, y_test, f):
         clf_KNN.fit(x_train, y_train)
         classifiers.append(clf_KNN)
         pred = clf_KNN.predict(x_test)
-        text = f'{i} {accuracy_score(y_test, pred)} {precision_score(y_test, pred)} {recall_score(y_test, pred)}\n'
+        text = f' {len(classifiers)} {i} {accuracy_score(y_test, pred)} {precision_score(y_test, pred)} {recall_score(y_test, pred)}\n'
         f.write(text)
         predicts.append(pred)
         f.write(f'{confusion_matrix(y_test, pred)}\n')
