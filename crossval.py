@@ -1,14 +1,10 @@
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
 import pickle
 from scipy.signal import butter, lfilter
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score, KFold
 import random
 import os
-from sklearn import svm
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 
@@ -40,14 +36,35 @@ x = np.concatenate((x_normal, x_seizure))
 y = np.concatenate((np.zeros((400, 1)), np.ones((100, 1))))
 
 
-score_svm = cross_val_score(SVC(kernel='linear'), x, y, cv=5, scoring='accuracy')
-score_rf = cross_val_score(RandomForestClassifier(max_depth=14), x, y, scoring='accuracy')
-score_knn = cross_val_score(KNeighborsClassifier(n_neighbors=5), x, y, scoring='accuracy')
+# score_svm = cross_val_score(SVC(kernel='linear'), x, y, cv=5)
+# score_rf = cross_val_score(RandomForestClassifier(max_depth=14), x, y, cv=5)
+# score_knn = cross_val_score(KNeighborsClassifier(n_neighbors=6), x, y, cv=5)
+#
+# f = open("crossval.txt", "w")
+# f.write("SVM\n")
+# f.write(f'{score_svm}\n')
+# f.write("Random Forest\n")
+# f.write(f'{score_rf}\n')
+# f.write("KNN\n")
+# f.write(f'{score_knn}\n')
+# f.close()
 
-print(score_svm, score_rf, score_knn)
+kf = KFold(n_splits=5, shuffle=True, random_state=1)
+kf.split(x, y)
 
-score_svm = cross_val_score(SVC(kernel='linear'), x, y, cv=5)
-score_rf = cross_val_score(RandomForestClassifier(max_depth=14), x, y)
-score_knn = cross_val_score(KNeighborsClassifier(n_neighbors=5), x, y)
+for train_index, test_index in kf.split(x, y):
+    print(f'Train set: {len(train_index)}, Test set:{len(test_index)}')
 
-print(score_svm, score_rf, score_knn)
+score_svm = cross_val_score(SVC(kernel='linear'), x, y, cv=kf, scoring='recall')
+score_rf = cross_val_score(RandomForestClassifier(max_depth=13), x, y, cv=kf, scoring='recall')
+score_knn = cross_val_score(KNeighborsClassifier(n_neighbors=6), x, y, cv=kf, scoring='recall')
+
+f = open("cross_val.txt", "w")
+f.write("SVM\n")
+f.write(f'{np.mean(score_svm)}\n')
+f.write("Random Forest\n")
+f.write(f'{np.mean(score_rf)}\n')
+f.write("KNN\n")
+f.write(f'{np.mean(score_knn)}\n')
+f.close()
+

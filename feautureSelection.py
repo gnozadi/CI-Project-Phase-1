@@ -146,7 +146,8 @@ def negative_sum(x):
 
 
 def feature_engineering(x):
-    out = np.vstack((median(x), mean(x), std(x), skw(x), krt(x),max(x), min(x),var(x) ,shannon(x),log_energy(x),renyi(x), norm(x), ptp(x), zc(x), negative_sum(x)))
+    out = np.vstack((median(x), mean(x), std(x), skw(x), krt(x), max(x), min(x), var(x), shannon(x),
+                    log_energy(x), renyi(x), norm(x), ptp(x), zc(x), negative_sum(x)))
     return out.transpose()
 
 
