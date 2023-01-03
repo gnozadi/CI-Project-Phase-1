@@ -151,5 +151,40 @@ def feature_engineering(x):
     return out.transpose()
 
 
+def selectFeature(i, x):
+    if i == 1:
+        return median(x), 'median'
+    elif i == 2:
+        return mean(x), 'mean'
+    elif i == 3:
+        return std(x), 'standard deviation'
+    elif i== 4:
+        return skw(x), 'skewness'
+    elif i == 5:
+        return krt(x), 'kurtosis'
+    elif i == 6:
+        return max(x), 'max'
+    elif i == 7:
+        return min(x), 'min'
+    elif i == 8:
+        return var(x), 'variance'
+    elif i == 9:
+        return shannon(x), 'shannon'
+    elif i == 10:
+        return log_energy(x), 'log energy'
+    elif i == 11:
+        return renyi(x), 'renyi'
+    elif i == 12:
+        return norm(x), 'norm'
+    elif i == 13:
+        return ptp(x), 'point-to-point'
+    elif i == 14:
+        return zc(x), 'zero crossing'
+    elif i == 15:
+        return negative_sum(x), 'negative sum'
+    else:
+        return None
+
+
 x = pickle.load(open('x.pkl', 'rb'))
 print(feature_engineering(x).shape)
