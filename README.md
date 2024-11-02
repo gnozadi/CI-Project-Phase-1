@@ -1,7 +1,7 @@
 # EEG Signal Classification Project
 
 ## Overview
-This project focuses on classifying EEG (electroencephalogram) signals to detect seizure activity using a machine learning pipeline. The approach incorporates feature engineering, data normalization, and the evaluation of various classification models to optimize accuracy and performance.
+This project uses a machine learning pipeline to classify EEG (electroencephalogram) signals to detect seizure activity. The approach incorporates feature engineering, data normalization, and evaluating various classification models to optimize accuracy and performance.
 
 ## Objectives
 - Implement a robust workflow for feature extraction from EEG data.
@@ -27,3 +27,6 @@ A total of 15 unique features were extracted, including:
 
 ## Conclusion
 The project successfully classified EEG signals with high accuracy, particularly using the Random Forest algorithm. Future work could involve exploring deep learning models for enhanced performance and applying the methods to real-time EEG monitoring applications.
+
+## References
+Link to relevant research or source material: UPF EEG Study
