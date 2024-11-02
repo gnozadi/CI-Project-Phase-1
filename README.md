@@ -1,34 +1,33 @@
+Here's a more detailed README file based on the analysis provided in your document:
+
+---
+
 # EEG Signal Classification Project
 
 ## Overview
-This project aims to develop and evaluate a system for detecting seizures using EEG (electroencephalogram) data. The focus is on processing EEG signals to classify seizure and non-seizure events using a combination of feature engineering and machine learning models.
+This project focuses on classifying EEG (electroencephalogram) signals to detect seizure activity using a machine learning pipeline. The approach incorporates feature engineering, data normalization, and the evaluation of various classification models to optimize accuracy and performance.
 
 ## Objectives
-- Implement a robust pipeline for loading and preprocessing EEG data.
-- Develop feature extraction techniques using time and frequency domain features and LBP-based characteristics.
-- Evaluate machine learning models for classification, including SVM, Random Forest, and KNN.
-- Employ k-fold cross-validation for reliable performance assessment.
+- Implement a robust workflow for feature extraction from EEG data.
+- Develop and compare the performance of different machine learning models, including SVM, Random Forest, and KNN.
+- Employ k-fold cross-validation to evaluate model robustness and performance metrics such as accuracy, precision, and recall.
 
-## Data Source
-The EEG dataset used in this project was gathered with a specific focus on reliable and standardized signal acquisition, ensuring high-quality data for training and testing purposes.
+## Data and Preprocessing
+The EEG data used in this project was preprocessed to ensure consistency and quality. Normalization was applied to input features to test its effect on classification accuracy, with results indicating minimal impact on models like Random Forest and SVM but significant improvements for KNN with higher k-values.
 
-## Methodology
-1. **Data Preprocessing**: 
-   - Loading raw EEG data and preparing it for analysis by segmenting the signals into manageable sequences.
-2. **Feature Extraction**:
-   - Employing statistical, time-domain, frequency-domain, and LBP-based features to extract meaningful information from EEG signals.
-3. **Model Training**:
-   - Implementing and fine-tuning SVM, Random Forest, and KNN classifiers.
-   - Cross-validation with a k-fold approach to ensure the robustness of the evaluation.
-4. **Performance Metrics**:
-   - Reporting accuracy, precision, recall, and providing confusion matrices for a comprehensive evaluation.
+## Feature Engineering
+A total of 15 unique features were extracted, including:
+- **Statistical Features**: Mean, median, standard deviation, skewness, kurtosis, max, min, and variance.
+- **Entropy Measures**: Shannon entropy, log energy entropy, Renyi entropy, and normalized entropy.
+- **Time-Domain Features**: Peak-to-peak (PTP) and zero-crossing rate.
+- **Innovative Features**: Negative sum (sum of negative signal values).
 
-## Results
-The models' performances were evaluated based on precision, recall, and overall accuracy, with detailed analysis comparing their strengths in different contexts.
+## Model Implementation
+- **SVM**: Tested with different kernel types (Linear, Polynomial, RBF, Sigmoid). The Linear kernel provided the most consistent results.
+- **Random Forest**: Optimal performance achieved with a max depth of 13, yielding high accuracy and precision.
+- **KNN**: Performance varied with the number of neighbors; the best result was obtained with k = 6.
+
+
 
 ## Conclusion
-This project demonstrates the capability to automate the detection of seizure events using EEG data with a solid foundation in machine learning, providing valuable insights for potential applications in healthcare.
-
-## References
-- Link to relevant research or source material: [UPF EEG Study](https://www.upf.edu/web/ntsa/downloads/-/asset_publisher/xvT6E4pczrBw/content/2001-indications-of-nonlinear-deterministic-and-finite-dimensional-structures-in-time-series-of-brain-electrical-activity-dependence-on-recording-regi)
-
+The project successfully classified EEG signals with high accuracy, particularly using the Random Forest algorithm. Future work could involve exploring deep learning models for enhanced performance and applying the methods to real-time EEG monitoring applications.
