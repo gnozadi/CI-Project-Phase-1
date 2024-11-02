@@ -1,7 +1,3 @@
-Here's a more detailed README file based on the analysis provided in your document:
-
----
-
 # EEG Signal Classification Project
 
 ## Overview
